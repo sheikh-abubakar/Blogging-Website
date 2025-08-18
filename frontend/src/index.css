@@ -1,4 +1,37 @@
-:root {
+@import "tailwindcss";
+
+
+
+/* :root {
+  --ring: 0 0% 0%;
+}
+
+* { outline: none; }
+
+.card {
+  @apply bg-white rounded-2xl shadow-soft p-6;
+}
+.btn {
+  @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium transition hover:opacity-90;
+}
+.btn-primary {
+  @apply btn bg-black text-white;
+}
+.btn-ghost {
+  @apply btn bg-transparent text-gray-700 hover:bg-gray-100;
+}
+.input {
+  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2 focus:ring-2 focus:ring-black/10;
+}
+.label {
+  @apply text-sm font-medium text-gray-700 mb-1;
+}
+.nav-link {
+  @apply text-sm font-medium text-gray-700 hover:text-black;
+} */
+
+
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +98,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
