@@ -3,6 +3,8 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import api from "../lib/api";
 import { useNavigate } from "react-router-dom";
+import TagInput from "../components/TagInput";
+import FeatureImageUpload from "../components/FeatureImageUpload";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -13,18 +15,32 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErr(null); setOk(null); setLoading(true);
-    try {
-      await api.post("/api/posts", { title, content });
-      setOk("Post created!");
-      setTimeout(() => navigate("/dashboard"), 800);
-    } catch (e: any) {
-      setErr(e?.response?.data?.error || "Failed to create post");
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setErr(null); setOk(null); setLoading(true);
+  try {
+    let imageUrl = "";
+    if (featureImage) {
+      // Upload image to Supabase Storage
+      const formData = new FormData();
+      formData.append("file", featureImage);
+      const res = await api.post("/api/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      imageUrl = res.data.url;
     }
-  };
+    await api.post("/api/posts", { title, content, tags, feature_image: imageUrl });
+    setOk("Post created!");
+    setTimeout(() => navigate("/dashboard"), 800);
+  } catch (e: any) {
+    setErr(e?.response?.data?.error || "Failed to create post");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const [tags, setTags] = useState<string[]>([]);
+  const [featureImage, setFeatureImage] = useState<File | null>(null);
+
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -32,6 +48,8 @@ export default function CreatePost() {
         <h2 className="text-2xl font-bold">Create a new post</h2>
         <form onSubmit={submit} className="mt-6 space-y-4">
           <Input label="Title" value={title} onChange={e=>setTitle(e.target.value)} required />
+          <TagInput tags={tags} setTags={setTags} />
+          <FeatureImageUpload setFile={setFeatureImage} />
           <label className="block">
             <div className="label">Content</div>
             <textarea

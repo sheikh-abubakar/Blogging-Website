@@ -10,4 +10,6 @@ export type Post = {
   content: string;
   author_id: string;
   created_at: string;
+  feature_image?: string; 
+  tags?: string[]; 
 };

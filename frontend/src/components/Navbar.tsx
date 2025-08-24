@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import Button from "./Button";
 
 export default function Navbar() {
   const { token, user, logout } = useAuth();
@@ -21,9 +22,9 @@ export default function Navbar() {
             <span className="text-sm text-gray-700">Hi, {user?.email}</span>
             <Link className="nav-link" to="/create">Create</Link>
             <Link className="nav-link" to="/dashboard">Dashboard</Link>
-            <button className="btn-ghost" onClick={() => { logout(); navigate("/"); }}>
+            <Button className="btn-ghost" onClick={() => { logout(); navigate("/"); }}>
               Sign out
-            </button>
+            </Button>
           </div>
         )}
       </div>
