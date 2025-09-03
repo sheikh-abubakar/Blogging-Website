@@ -2,7 +2,6 @@ import { supabase } from "../services/supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const uploadImage = async (req, res) => {
-  console.log(req.files); // This should log the uploaded file in your backend terminal
   try {
     const file = req.files?.file;
     if (!file) return res.status(400).json({ error: "No file uploaded" });

@@ -1,7 +1,7 @@
 import type { Post } from "../types";
+import { Link } from "react-router-dom";
 
-export default function PostCard({ post, mine }: { post: Post; mine?: boolean }) {
-  // Ensure tags is always an array of strings
+export default function PostCard({ post }: { post: Post }) {
   let tags: string[] = [];
   if (Array.isArray(post.tags)) {
     tags = post.tags as string[];
@@ -10,25 +10,25 @@ export default function PostCard({ post, mine }: { post: Post; mine?: boolean })
   }
 
   return (
-    <article className="card hover:shadow-lg transition">
+    <article className="card hover:shadow-xl transition rounded-lg overflow-hidden bg-white">
       {post.feature_image && (
-        <img src={post.feature_image} alt="Feature" className="w-full h-48 object-cover rounded" />
+        <img src={post.feature_image} alt="Feature" className="w-full h-48 object-cover" />
       )}
-      <header className="flex items-start justify-between">
-        <h3 className="text-xl font-semibold">{post.title}</h3>
-        {mine && <span className="text-xs rounded-full bg-gray-100 px-2 py-1">My post</span>}
-      </header>
-      {tags.length > 0 && (
-        <div className="flex gap-2 mt-2">
+      <div className="p-4">
+        <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+        <div className="flex gap-2 mb-2 flex-wrap">
           {tags.map((tag: string) => (
-            <span key={tag} className="px-2 py-1 bg-gray-200 rounded text-xs">{tag}</span>
+            <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">{tag}</span>
           ))}
         </div>
-      )}
-      <p className="mt-3 text-gray-700 whitespace-pre-wrap">{post.content}</p>
-      <footer className="mt-4 text-xs text-gray-500">
-        {new Date(post.created_at).toLocaleString()}
-      </footer>
+        <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
+          <span>{new Date(post.created_at).toLocaleString()}</span>
+          <span>By {(post as any).author_name || post.author_id || "Unknown"}</span>
+        </div>
+        <Link to={`/post/${post.id}`} className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          Read More
+        </Link>
+      </div>
     </article>
   );
 }

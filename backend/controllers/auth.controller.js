@@ -21,6 +21,20 @@ export const register = async (req, res) => {
 
     if (error) return res.status(400).json({ error: error.message });
 
+    // Insert profile row after successful registration
+    if (data.user) {
+      const { id } = data.user;
+      await supabase
+        .from("profiles")
+        .insert([
+          {
+            id,
+            username: email.split("@")[0], // or use a username field from req.body if you have one
+            full_name: full_name || ""
+          }
+        ]);
+    }
+
     // For email confirmation ON projects, user must verify email in inbox
     res.status(201).json({
       message: "Registration successful",

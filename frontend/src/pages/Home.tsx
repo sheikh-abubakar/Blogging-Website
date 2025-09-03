@@ -14,15 +14,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-5xl mx-auto py-8 space-y-6">
       <header className="text-center">
-        <h1 className="mt-2 text-3xl font-extrabold">Explore posts</h1>
-        <p className="mt-2 text-gray-600">Read what others are writing.</p>
+        <h1 className="mt-2 text-4xl font-extrabold text-blue-700">Explore posts</h1>
+        <p className="mt-2 text-gray-600 text-lg">Read what others are writing.</p>
       </header>
 
       {loading && <div className="card">Loading…</div>}
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {posts.map(p => <PostCard key={p.id} post={p} />)}
       </div>
 

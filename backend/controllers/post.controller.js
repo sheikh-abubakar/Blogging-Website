@@ -7,13 +7,36 @@ const supabaseKey = process.env.SUPABASE_KEY;
 
 // Get all posts
 export const getPosts = async (req, res) => {
-  const { data, error } = await createClient(supabaseUrl, supabaseKey)
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data, error } = await supabase
     .from("posts")
-    .select("*");
+    .select(`
+      id,
+      title,
+      content,
+      author_id,
+      created_at,
+      tags,
+      feature_image,
+      profiles (
+        full_name,
+        username
+      )
+    `)
+    .order("created_at", { ascending: false });
 
+    // Add these lines for debugging
+  console.log("Supabase posts data:", data);
+  console.log("Supabase posts error:", error);
+  
   if (error) return res.status(400).json({ error: error.message });
 
-  res.json(data);
+  const posts = (data || []).map(post => ({
+    ...post,
+    author_name: post.profiles?.full_name || post.profiles?.username || post.author_id || "Unknown"
+  }));
+
+  res.json(posts);
 };
 
 // Create a post
@@ -48,21 +71,38 @@ export const createPost = async (req, res) => {
 // Get single post by ID
 export const getPostById = async (req, res) => {
   const { id } = req.params;
-  const { data, error } = await createClient(supabaseUrl, supabaseKey)
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select(`
+      id,
+      title,
+      content,
+      author_id,
+      created_at,
+      tags,
+      feature_image,
+      profiles (
+        full_name,
+        username
+      )
+    `)
     .eq("id", id)
     .single();
 
   if (error) return res.status(404).json({ error: error.message });
 
-  res.json(data);
+  res.json({
+    ...data,
+    author_name: data?.profiles?.full_name || data?.profiles?.username || data.author_id || "Unknown"
+  });
 };
 
 // Delete a post
 export const deletePost = async (req, res) => {
   const { id } = req.params;
-  const { data, error } = await createClient(supabaseUrl, supabaseKey)
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data, error } = await supabase
     .from("posts")
     .delete()
     .eq("id", id);
