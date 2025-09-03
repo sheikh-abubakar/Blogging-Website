@@ -24,7 +24,6 @@ export default function PostDetail() {
     tags = (post.tags as string).split(",").map((tag: string) => tag.trim()).filter(Boolean);
   }
 
-  // Use post.author_name if available, else fallback to post.author_id
   const author = (post as any).author_name || post.author_id || "Unknown";
 
   return (
@@ -44,7 +43,11 @@ export default function PostDetail() {
           <span>{new Date(post.created_at).toLocaleString()}</span>
           <span>By {author}</span>
         </div>
-        <div className="text-gray-800 whitespace-pre-line text-lg">{post.content}</div>
+        
+        <div 
+          className="text-gray-800 text-lg prose prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800 prose-a:font-medium max-w-none" 
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
       </article>
     </div>
   );

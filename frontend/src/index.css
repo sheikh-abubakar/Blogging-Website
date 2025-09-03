@@ -1,101 +1,72 @@
 @import "tailwindcss";
 
-
-
-/* :root {
-  --ring: 0 0% 0%;
+/* TipTap Editor Specific Styles */
+.ProseMirror {
+  min-height: 200px;
 }
 
-* { outline: none; }
-
-.card {
-  @apply bg-white rounded-2xl shadow-soft p-6;
-}
-.btn {
-  @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium transition hover:opacity-90;
-}
-.btn-primary {
-  @apply btn bg-black text-white;
-}
-.btn-ghost {
-  @apply btn bg-transparent text-gray-700 hover:bg-gray-100;
-}
-.input {
-  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2 focus:ring-2 focus:ring-black/10;
-}
-.label {
-  @apply text-sm font-medium text-gray-700 mb-1;
-}
-.nav-link {
-  @apply text-sm font-medium text-gray-700 hover:text-black;
-} */
-
-
-/* :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
-a {
+/* Ensure links are visible in the editor */
+.ProseMirror a {
+  color: #2563eb; /* blue-600 */
+  text-decoration: underline;
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+/* Style links in rendered content */
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: color 0.2s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
+.prose a:hover {
+  color: #1d4ed8; /* blue-700 */
+}
+
+/* Ensure headings are visible in the editor */
+.ProseMirror h1 {
+  font-size: 2em !important;
+  font-weight: bold !important;
+  margin-top: 0.67em !important;
+  margin-bottom: 0.67em !important;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin-top: 0.83em !important;
+  margin-bottom: 0.83em !important;
+}
+
+.ProseMirror h3 {
+  font-size: 1.17em !important;
+  font-weight: bold !important;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+/* Ensure lists are visible in the editor */
+.ProseMirror ul {
+  list-style-type: disc !important;
+  margin-left: 1em !important;
+  padding-left: 1em !important;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal !important;
+  margin-left: 1em !important;
+  padding-left: 1em !important;
+}
+
+.ProseMirror li {
+  display: list-item !important;
+}

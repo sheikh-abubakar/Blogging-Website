@@ -3,11 +3,34 @@ import { Link } from "react-router-dom";
 
 export default function PostCard({ post }: { post: Post }) {
   let tags: string[] = [];
+  
+  // Fix TypeScript errors by adding type assertions
   if (Array.isArray(post.tags)) {
     tags = post.tags as string[];
   } else if (typeof post.tags === "string") {
-    tags = (post.tags as string).split(",").map((tag: string) => tag.trim()).filter(Boolean);
+    
+    const tagString = post.tags as string;
+    
+    if (tagString.startsWith('[') && tagString.endsWith(']')) {
+      try {
+        const parsedTags = JSON.parse(tagString);
+        if (Array.isArray(parsedTags)) {
+          tags = parsedTags;
+        }
+      } catch (e) {
+        tags = tagString.split(",").map((tag: string) => tag.trim()).filter(Boolean);
+      }
+    } else {
+      tags = tagString.split(",").map((tag: string) => tag.trim()).filter(Boolean);
+    }
   }
+
+  tags = tags.map(tag => {
+    if (typeof tag === 'string') {
+      return tag.replace(/^["'\[\]]+|["'\[\]]+$/g, '').trim();
+    }
+    return tag;
+  });
 
   return (
     <article className="card hover:shadow-xl transition rounded-lg overflow-hidden bg-white">
@@ -16,11 +39,18 @@ export default function PostCard({ post }: { post: Post }) {
       )}
       <div className="p-4">
         <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-        <div className="flex gap-2 mb-2 flex-wrap">
-          {tags.map((tag: string) => (
-            <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">{tag}</span>
+        
+        <div className="flex gap-2 mb-3 flex-wrap">
+          {tags.map((tag: string, index) => (
+            <span 
+              key={index} 
+              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 border border-blue-100 hover:bg-blue-100 transition-colors duration-200"
+            >
+              #{tag}
+            </span>
           ))}
         </div>
+        
         <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
           <span>{new Date(post.created_at).toLocaleString()}</span>
           <span>By {(post as any).author_name || post.author_id || "Unknown"}</span>
