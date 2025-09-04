@@ -36,6 +36,14 @@ app.get("/debug", (req, res) => {
   });
 });
 
+app.use((req, res, next) => {
+  // Strip /api prefix if present for Vercel deployment
+  if (req.url.startsWith('/api/')) {
+    req.url = req.url.replace('/api/', '/');
+  }
+  next();
+});
+
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
 app.post("/upload", uploadImage);

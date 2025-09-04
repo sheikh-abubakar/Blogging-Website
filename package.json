@@ -6,6 +6,11 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "scripts": {
+    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
+    "build": "cd frontend && npm install && npm run build",
+    "vercel-build": "cd frontend && npm install && npm run build"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0",
     "bcrypt": "^6.0.0",
@@ -15,5 +20,8 @@
     "express-fileupload": "^1.5.2",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

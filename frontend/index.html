@@ -4,16 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Blogging Website</title>
     
-    <!-- Add this script to block problematic WebSocket connections -->
+    <!-- Improved error handling -->
     <script>
-      // Block localhost WebSocket connections in production
+      window.addEventListener('error', function(e) {
+        console.error('Global error caught:', e.error || e.message);
+        // Display error on screen for debugging in production
+        if (!document.getElementById('app-error')) {
+          const errorDiv = document.createElement('div');
+          errorDiv.id = 'app-error';
+          errorDiv.style = 'position:fixed;top:0;left:0;right:0;background:red;color:white;padding:20px;z-index:9999;';
+          errorDiv.innerText = 'Error loading app: ' + (e.error?.toString() || e.message || 'Unknown error');
+          document.body.prepend(errorDiv);
+        }
+      });
+    </script>
+    
+    <!-- Enhanced WebSocket blocking script -->
+    <script>
+      // Block development WebSocket connections in production
       if (window.location.hostname !== 'localhost') {
         const originalWebSocket = window.WebSocket;
         window.WebSocket = function(url, protocols) {
-          if (url.includes('localhost:8098')) {
-            console.log('Prevented localhost WebSocket connection in production');
+          // Block any localhost websocket connections or insecure ws:// in production
+          if (url.includes('localhost') || (url.includes('ws://') && !url.includes('wss://'))) {
+            console.log('Prevented development WebSocket connection in production:', url);
             return {
               addEventListener: function() {},
               removeEventListener: function() {},
