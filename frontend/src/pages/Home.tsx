@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
     api
-      .get("/api/posts")
+      .get("/posts")
       .then((res) => {
         const data = res.data;
         console.log("Home API response:", data);
