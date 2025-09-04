@@ -1,24 +1,27 @@
 import type { Post } from "../types";
 import { Link } from "react-router-dom";
 
-// Extend the Post type to include optional author_name
 interface ExtendedPost extends Post {
   author_name?: string;
 }
 
-export default function PostCard({ post, mine }: { post: ExtendedPost; mine?: boolean }) {
-  // Ensure tags is always an array
+export default function PostCard({
+  post,
+  mine,
+}: {
+  post: ExtendedPost;
+  mine?: boolean;
+}) {
   let tags: string[] = [];
-  
+
   try {
     if (Array.isArray(post.tags)) {
       tags = post.tags as string[];
     } else if (typeof post.tags === "string") {
       const tagString = post.tags as string;
-      
       if (tagString.trim() === "") {
         tags = [];
-      } else if (tagString.startsWith('[') && tagString.endsWith(']')) {
+      } else if (tagString.startsWith("[") && tagString.endsWith("]")) {
         try {
           const parsedTags = JSON.parse(tagString);
           tags = Array.isArray(parsedTags) ? parsedTags : [];
@@ -33,14 +36,10 @@ export default function PostCard({ post, mine }: { post: ExtendedPost; mine?: bo
     console.error("Error parsing tags:", e);
     tags = [];
   }
-  
-  // Clean up tags (remove quotes, brackets, etc)
-  tags = tags.map((tag: string) => {
-    if (typeof tag === 'string') {
-      return tag.replace(/^["'\[\]]+|["'\[\]]+$/g, '').trim();
-    }
-    return String(tag);
-  });
+
+  tags = tags
+    .filter((tag): tag is string => typeof tag === "string")
+    .map((tag) => tag.replace(/^["'\[\]]+|["'\[\]]+$/g, "").trim());
 
   return (
     <article className="card hover:shadow-xl transition rounded-lg overflow-hidden bg-white relative">
@@ -49,18 +48,23 @@ export default function PostCard({ post, mine }: { post: ExtendedPost; mine?: bo
           My Post
         </div>
       )}
-      
+
       {post.feature_image && (
-        <img src={post.feature_image} alt="Feature" className="w-full h-48 object-cover" />
+        <img
+          src={post.feature_image}
+          alt="Feature"
+          className="w-full h-48 object-cover"
+        />
       )}
+
       <div className="p-4">
         <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-        
-        {Array.isArray(tags) && tags.length > 0 && (
+
+        {tags.length > 0 && (
           <div className="flex gap-2 mb-3 flex-wrap">
             {tags.map((tag, index) => (
-              <span 
-                key={index} 
+              <span
+                key={index}
                 className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 border border-blue-100 hover:bg-blue-100 transition-colors duration-200"
               >
                 #{tag}
@@ -68,12 +72,20 @@ export default function PostCard({ post, mine }: { post: ExtendedPost; mine?: bo
             ))}
           </div>
         )}
-        
+
         <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
-          <span>{new Date(post.created_at).toLocaleString()}</span>
+          <span>
+            {post.created_at
+              ? new Date(post.created_at).toLocaleString()
+              : "Unknown date"}
+          </span>
           <span>By {post.author_name || post.author_id || "Unknown"}</span>
         </div>
-        <Link to={`/post/${post.id}`} className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+
+        <Link
+          to={`/post/${post.id}`}
+          className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
           Read More
         </Link>
       </div>

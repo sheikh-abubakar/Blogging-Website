@@ -8,35 +8,42 @@ const supabaseKey = process.env.SUPABASE_KEY;
 // Get all posts
 export const getPosts = async (req, res) => {
   const supabase = createClient(supabaseUrl, supabaseKey);
-  const { data, error } = await supabase
-    .from("posts")
-    .select(`
-      id,
-      title,
-      content,
-      author_id,
-      created_at,
-      tags,
-      feature_image,
-      profiles (
-        full_name,
-        username
-      )
-    `)
-    .order("created_at", { ascending: false });
-
+  try {
+    const { data, error } = await supabase
+      .from("posts")
+      .select(`
+        id,
+        title,
+        content,
+        author_id,
+        created_at,
+        tags,
+        feature_image,
+        profiles (
+          full_name,
+          username
+        )
+      `)
+      .order("created_at", { ascending: false });
+    
     // Add these lines for debugging
-  console.log("Supabase posts data:", data);
-  console.log("Supabase posts error:", error);
-  
-  if (error) return res.status(400).json({ error: error.message });
+    console.log("Supabase posts data:", data);
+    console.log("Supabase posts error:", error);
+    
+    if (error) return res.status(400).json({ error: error.message });
 
-  const posts = (data || []).map(post => ({
-    ...post,
-    author_name: post.profiles?.full_name || post.profiles?.username || post.author_id || "Unknown"
-  }));
+    // Ensure data is always an array
+    const posts = (Array.isArray(data) ? data : []).map(post => ({
+      ...post,
+      author_name: post.profiles?.full_name || post.profiles?.username || post.author_id || "Unknown"
+    }));
 
-  res.json(posts);
+    res.json(posts);
+  } catch (err) {
+    console.error("Error in getPosts:", err);
+    // Return empty array on error instead of error object
+    res.status(500).json([]);
+  }
 };
 
 // Create a post
