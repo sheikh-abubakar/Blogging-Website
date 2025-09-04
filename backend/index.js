@@ -10,8 +10,15 @@ dotenv.config();
 
 const app = express();
 
-// Middlewares
-app.use(cors()); // optionally pass { origin: "http://localhost:5173", credentials: true }
+// Updated CORS configuration
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // Development frontend
+    process.env.FRONTEND_URL || "https://your-production-frontend-url.com" // Production frontend
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(fileUpload());
 

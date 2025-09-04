@@ -1,7 +1,10 @@
 import axios from "axios";
 
+// Use relative paths for API when deployed
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
+  baseURL: import.meta.env.DEV 
+    ? import.meta.env.VITE_API_URL 
+    : "/api" // In production, API is at /api path
 });
 
 api.interceptors.request.use((config) => {
