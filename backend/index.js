@@ -14,7 +14,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173", // Development frontend
-    process.env.FRONTEND_URL || "https://your-production-frontend-url.com" // Production frontend
+    "https://blogging-website-blue.vercel.app" // Production frontend
   ],
   credentials: true
 }));
