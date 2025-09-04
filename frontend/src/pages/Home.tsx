@@ -14,9 +14,14 @@ export default function Home() {
       .get("/api/posts")
       .then((res) => {
         const data = res.data;
-        console.log("Home API response:", data); // 🔎 Debug on Vercel
+        console.log("Home API response:", data);
+
         if (Array.isArray(data)) {
+          // case 1: backend returns raw array
           setPosts(data);
+        } else if (Array.isArray(data.posts)) {
+          // case 2: backend wraps posts inside "posts"
+          setPosts(data.posts);
         } else {
           setPosts([]);
           setError("Received invalid data format from server");
