@@ -5,6 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+    
+    <!-- Add this script to block problematic WebSocket connections -->
+    <script>
+      // Block localhost WebSocket connections in production
+      if (window.location.hostname !== 'localhost') {
+        const originalWebSocket = window.WebSocket;
+        window.WebSocket = function(url, protocols) {
+          if (url.includes('localhost:8098')) {
+            console.log('Prevented localhost WebSocket connection in production');
+            return {
+              addEventListener: function() {},
+              removeEventListener: function() {},
+              send: function() {},
+              close: function() {}
+            };
+          }
+          return new originalWebSocket(url, protocols);
+        };
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
