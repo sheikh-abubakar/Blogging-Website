@@ -1,7 +1,8 @@
 import type { Post } from "../types";
 import { Link } from "react-router-dom";
 
-export default function PostCard({ post }: { post: Post }) {
+// Add the mine prop to your component definition with optional flag
+export default function PostCard({ post, mine }: { post: Post; mine?: boolean }) {
   let tags: string[] = [];
   
   // Fix TypeScript errors by adding type assertions
@@ -34,6 +35,13 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <article className="card hover:shadow-xl transition rounded-lg overflow-hidden bg-white">
+      {/* Optionally display a badge if it's the user's own post */}
+      {mine && (
+        <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 absolute top-2 right-2 rounded">
+          My Post
+        </div>
+      )}
+      
       {post.feature_image && (
         <img src={post.feature_image} alt="Feature" className="w-full h-48 object-cover" />
       )}

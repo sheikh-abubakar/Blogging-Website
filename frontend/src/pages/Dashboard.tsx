@@ -31,7 +31,7 @@ export default function Dashboard() {
       {loading && <div className="card">Loading…</div>}
 
       <section className="grid gap-5 md:grid-cols-2">
-        {myPosts.map(p => <PostCard key={p.id} post={p} mine />)}
+        {myPosts.map(p => <PostCard key={p.id} post={p} mine={true} />)}
       </section>
 
       {!loading && myPosts.length === 0 && (
